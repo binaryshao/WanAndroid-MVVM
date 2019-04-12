@@ -11,6 +11,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -46,4 +47,5 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation rootProject.ext.libraries
     kapt "com.github.bumptech.glide:compiler:$rootProject.ext.dependVersion.glide"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }
