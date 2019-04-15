@@ -1,11 +1,8 @@
 package com.sbingo.wanandroid_mvvm.base.paging
 
-import android.net.wifi.p2p.WifiP2pDevice.FAILED
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -32,8 +29,11 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        bind(holder, getItem(position)!!, position)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            TYPE_ITEM -> bind(holder, getItem(position)!!, position)
+            TYPE_FOOTER -> (holder as FooterViewHolder).bindTo(requestState)
+        }
     }
 
     open class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -57,22 +57,18 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
     }
 
     class FooterViewHolder(view: View, private val retryCallback: () -> Unit) : ViewHolder(view) {
-        private val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
-        private val retry = view.findViewById<Button>(R.id.retry_button)
-        private val errorMsg = view.findViewById<TextView>(R.id.error_msg)
 
         init {
-            retry.setOnClickListener {
+            getView(R.id.retry_button)?.setOnClickListener {
                 retryCallback()
             }
         }
 
         fun bindTo(requestState: RequestState<Any>?) {
-            setText(R.id.msg, requestState?.status"加载中...")
-            progressBar.visibility = toVisibility(networkState?.status == RUNNING)
-            retry.visibility = toVisibility(networkState?.status == FAILED)
-            errorMsg.visibility = toVisibility(networkState?.msg != null)
-            errorMsg.text = networkState?.msg
+            getView(R.id.progress_bar)?.visibility = toVisibility(requestState!!.isLoading())
+            getView(R.id.retry_button)?.visibility = toVisibility(requestState.isError())
+            getView(R.id.msg)?.visibility = toVisibility(requestState.isLoading())
+            setText(R.id.msg, "加载中")
         }
 
         companion object {
@@ -92,7 +88,7 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         }
     }
 
-    private fun hasExtraRow() = !!requestState?.isSuccess()
+    private fun hasExtraRow() = !requestState?.isSuccess()!!
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
