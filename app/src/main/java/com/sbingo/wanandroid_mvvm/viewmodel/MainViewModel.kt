@@ -10,5 +10,5 @@ import com.sbingo.wanandroid_mvvm.repository.MainRepository
 class MainViewModel(repository: MainRepository) : ViewModel() {
 
     var curPage: Int = 0
-    var articlePages = repository.getArticles()
+//    var articlePages = repository.getArticles()
 }
