@@ -11,7 +11,7 @@ import rx.Observable
  */
 interface WanApi {
 
-    @GET("article/list/{pageNum}/json")
-    fun getArticles(@Path("pageNum") pageNum: Int): Observable<HttpResponse<ArticlePages>>
+    @GET("article/list/{pageNo}/json")
+    fun getArticles(@Path("pageNo") pageNo: Int): Observable<HttpResponse<ArticlePages>>
 
 }

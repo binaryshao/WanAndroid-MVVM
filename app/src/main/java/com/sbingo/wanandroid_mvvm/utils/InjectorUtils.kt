@@ -14,7 +14,6 @@ object InjectorUtils {
         return MainRepository.getInstance(HttpManager.getInstance())
     }
 
-
     fun provideMainViewModelFactory(): MainViewModelFactory {
         return MainViewModelFactory(getMainRepository())
     }

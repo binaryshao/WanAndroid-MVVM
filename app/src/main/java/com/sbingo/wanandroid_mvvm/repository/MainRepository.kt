@@ -18,23 +18,4 @@ class MainRepository(val httpManager: HttpManager) {
             }
     }
 
-//    fun getArticles() = httpManager.wanApi.getArticles(1)
-//        .subscribeOn(Schedulers.io())
-//        .observeOn(AndroidSchedulers.mainThread())
-//        .subscribe(new RxHttpObserver < HttpResult < LoginResult > > () {
-//            @Override
-//            public void onCompleted() {
-//                mView.complete();
-//            }
-//
-//            @Override
-//            public void onNext(HttpResult<LoginResult> result) {
-//                mView.loginSuccess(result.getResult());
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                mView.showError(e.getMessage());
-//            }
-//        });
 }
