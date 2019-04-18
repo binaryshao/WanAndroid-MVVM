@@ -168,7 +168,7 @@ class LoggingInterceptor @JvmOverloads constructor(private val logger: Logger = 
         val response = chain.proceed(request)
         val tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
 
-        val responseBody = response.body()
+        val responseBody = response.body()!!
         //响应码及url等
         logger.log("<-- "
                 + response.code()

@@ -1,9 +1,9 @@
 package com.sbingo.wanandroid_mvvm.data.http
 
 import com.sbingo.wanandroid_mvvm.model.ArticlePages
+import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
-import rx.Observable
 
 /**
  * Author: Sbingo666
