@@ -24,9 +24,6 @@ class HomeDataSource(private val httpManager: HttpManager) : BaseItemKeyedDataSo
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : RxHttpObserver<HttpResponse<ArticlePages>>() {
-                override fun onComplete() {
-                }
-
                 override fun onNext(it: HttpResponse<ArticlePages>) {
                     pageNo = it.data?.curPage!!
                     networkSuccess()
@@ -45,9 +42,6 @@ class HomeDataSource(private val httpManager: HttpManager) : BaseItemKeyedDataSo
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : RxHttpObserver<HttpResponse<ArticlePages>>() {
-                override fun onComplete() {
-                }
-
                 override fun onNext(it: HttpResponse<ArticlePages>) {
                     pageNo = it.data?.curPage!!
                     refreshSuccess()

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        android:elevation="@dimen/dp_5"
+        android:translationZ="@dimen/dp_5"
+        app:cardCornerRadius="@dimen/dp_5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:padding="@dimen/dp_8"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:id="@+id/fresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_fresh"
+                android:padding="@dimen/dp_2"
+                android:text="@string/fresh"
+                android:textColor="@color/Red"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:textSize="@dimen/sp_10"
+                app:layout_constraintBottom_toTopOf="@id/thumbnail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/fresh"
+                tools:text="@string/app_name"
+                android:layout_marginStart="@dimen/dp_10"
+                app:layout_goneMarginStart="@dimen/dp_0"
+                android:textSize="@dimen/sp_12"
+                app:layout_constraintStart_toEndOf="@+id/fresh"/>
+
+        <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/fresh"
+                tools:text="2999-09-09"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="@dimen/sp_12"/>
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="@string/app_name"
+                app:layout_constraintStart_toEndOf="@+id/thumbnail"
+                app:layout_constraintBottom_toTopOf="@+id/chapter"
+                android:layout_marginStart="@dimen/dp_10"
+                app:layout_goneMarginStart="@dimen/dp_0"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
+                app:layout_constraintTop_toBottomOf="@+id/fresh"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/textColorPrimary"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="@dimen/dp_4"
+                android:textSize="@dimen/sp_14"/>
+
+        <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="@dimen/dp_120"
+                android:layout_marginTop="@dimen/dp_10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:scaleType="centerCrop"
+                android:layout_height="@dimen/dp_100"/>
+
+        <TextView
+                android:id="@+id/chapter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/app_name"
+                android:layout_marginTop="@dimen/dp_10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/thumbnail"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="@dimen/sp_12"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

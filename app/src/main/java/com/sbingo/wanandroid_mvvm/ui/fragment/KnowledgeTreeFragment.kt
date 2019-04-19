@@ -2,7 +2,6 @@ package com.sbingo.wanandroid_mvvm.ui.fragment
 
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.base.BaseFragment
-import kotlinx.android.synthetic.main.refresh_layout.*
 
 /**
  * Author: Sbingo666
@@ -14,7 +13,6 @@ class KnowledgeTreeFragment : BaseFragment() {
 
 
     override fun initData() {
-        test.text = getString(R.string.knowledge_tree)
     }
 
     override fun subscribeUi() {

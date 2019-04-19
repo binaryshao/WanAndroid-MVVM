@@ -1,7 +1,16 @@
 package com.sbingo.wanandroid_mvvm.ui.fragment
 
+import android.graphics.Color
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.sbingo.wanandroid_mvvm.R
+import com.sbingo.wanandroid_mvvm.adapter.HomeAdapter
 import com.sbingo.wanandroid_mvvm.base.BaseFragment
+import com.sbingo.wanandroid_mvvm.data.http.HttpManager
+import com.sbingo.wanandroid_mvvm.paging.repository.HomeRepository
+import com.sbingo.wanandroid_mvvm.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.refresh_layout.*
 
 /**
@@ -10,13 +19,48 @@ import kotlinx.android.synthetic.main.refresh_layout.*
  */
 class HomeFragment : BaseFragment() {
 
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val repository = HomeRepository(HttpManager.getInstance())
+                return HomeViewModel(repository) as T
+            }
+        })
+            .get(HomeViewModel::class.java)
+    }
+
+    private val adapter by lazy {
+        HomeAdapter {viewModel.retry()}
+    }
+
     override var layoutId = R.layout.refresh_layout
 
-
     override fun initData() {
-        test.text = getString(R.string.home)
+        initSwipe()
+        initRecyclerView()
     }
 
     override fun subscribeUi() {
+        viewModel.pagedList.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
+        viewModel.refreshState.observe(
+            viewLifecycleOwner,
+            Observer { swipeRefreshLayout.isRefreshing = it.isLoading() })
+        viewModel.networkState.observe(viewLifecycleOwner, Observer {
+            adapter.setRequestState(it)
+        })
+        viewModel.setPageSize()
     }
+
+    private fun initSwipe() {
+        swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE)
+        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+    }
+
+    private fun initRecyclerView() {
+        recyclerView.adapter = adapter
+    }
+
 }

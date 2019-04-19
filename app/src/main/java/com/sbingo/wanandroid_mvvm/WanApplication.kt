@@ -28,7 +28,8 @@ class WanApplication : MultiDexApplication() {
     private fun initLogger() {
         val lever = if (BuildConfig.DEBUG) LogLevel.FULL else LogLevel.NONE
         Logger.init("Sbingo666")
-            .methodCount(1)
+            .methodCount(0)
+            .hideThreadInfo()
             .logLevel(lever)
     }
 

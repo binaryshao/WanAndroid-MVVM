@@ -1,5 +1,6 @@
 package com.sbingo.wanandroid_mvvm.base.paging
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,12 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
     private val TYPE_ITEM = 0
     private val TYPE_FOOTER = 1
     private var requestState: RequestState<Any>? = null
+    lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        context = parent.context
         return when (viewType) {
-            TYPE_ITEM -> ViewHolder(LayoutInflater.from(parent.context).inflate(getItemLayout(), parent, false))
+            TYPE_ITEM -> ViewHolder(LayoutInflater.from(context).inflate(getItemLayout(), parent, false))
             TYPE_FOOTER -> FooterViewHolder.create(parent, retryCallback)
             else -> throw IllegalArgumentException("未知 view type = $viewType")
         }
@@ -40,18 +43,26 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         private val map = mutableMapOf<Int, View>()
 
         fun getView(id: Int): View? {
-            var viewId = map[id]
-            if (viewId == null) {
-                viewId = view.findViewById(id)
-                map[id] = viewId
+            var view = map[id]
+            if (view == null) {
+                view = this.view.findViewById(id)
+                map[id] = view
             }
-            return viewId
+            return view
         }
 
         fun setText(id: Int, string: String?) {
             val textView = getView(id)
             if (textView is TextView) {
                 textView.text = string
+            }
+        }
+
+        fun toVisibility(id: Int, constraint: Boolean) {
+            getView(id)?.visibility = if (constraint) {
+                View.VISIBLE
+            } else {
+                View.GONE
             }
         }
     }
@@ -65,10 +76,10 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         }
 
         fun bindTo(requestState: RequestState<Any>?) {
-            getView(R.id.progress_bar)?.visibility = toVisibility(requestState!!.isLoading())
-            getView(R.id.retry_button)?.visibility = toVisibility(requestState.isError())
-            getView(R.id.msg)?.visibility = toVisibility(requestState.isLoading())
-            setText(R.id.msg, "加载中")
+            toVisibility(R.id.progress_bar, requestState!!.isLoading())
+            toVisibility(R.id.retry_button, requestState.isError())
+            toVisibility(R.id.msg, requestState.isLoading())
+            setText(R.id.msg, "加载中...")
         }
 
         companion object {
@@ -77,18 +88,15 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
                     .inflate(R.layout.footer_item, parent, false)
                 return FooterViewHolder(view, retryCallback)
             }
-
-            fun toVisibility(constraint: Boolean): Int {
-                return if (constraint) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
-            }
         }
     }
 
-    private fun hasExtraRow() = !requestState?.isSuccess()!!
+    private fun hasExtraRow() =
+        if (requestState == null)
+            false
+        else {
+            !requestState?.isSuccess()!!
+        }
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
@@ -118,7 +126,8 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         }
     }
 
+    abstract fun getItemLayout(): Int
+
     abstract fun bind(holder: ViewHolder, item: T, position: Int)
 
-    abstract fun getItemLayout(): Int
 }

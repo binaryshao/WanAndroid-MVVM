@@ -24,7 +24,7 @@ class HeaderInterceptor : Interceptor {
             val spHost: String by PreferenceUtils(host, "")
             val cookie: String = if (spHost.isNotEmpty()) spHost else ""
             if (cookie.isNotEmpty()) {
-                builder.addHeader(HttpConstants.COOKIE_Header_REQUEST, cookie)
+                builder.addHeader(HttpConstants.COOKIE_HEADER_REQUEST, cookie)
             }
         }
         return chain.proceed(builder.build())

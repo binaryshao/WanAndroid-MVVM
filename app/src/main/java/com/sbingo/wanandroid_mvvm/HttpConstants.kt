@@ -19,7 +19,7 @@ object HttpConstants {
     val LOGIN_REQUIRED_URLS = arrayOf("lg/collect", "lg/uncollect", "lg/todo")
 
     const val COOKIE_HEADER_RESPONSE = "set-cookie"
-    const val COOKIE_Header_REQUEST = "Cookie"
+    const val COOKIE_HEADER_REQUEST = "Cookie"
 
     fun encodeCookie(cookies: List<String>): String {
         val sb = StringBuilder()
