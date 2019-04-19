@@ -17,7 +17,7 @@ class CookieInterceptor : Interceptor {
         val host = request.url().host()
         if ((requestUrl.contains(HttpConstants.SAVE_USER_LOGIN_KEY)
                     || requestUrl.contains(HttpConstants.SAVE_USER_REGISTER_KEY))
-            && !response.headers(HttpConstants.COOKIE_HEADER_RESPONSE).isEmpty()
+            && response.headers(HttpConstants.COOKIE_HEADER_RESPONSE).isNotEmpty()
         ) {
             val cookies = response.headers(HttpConstants.COOKIE_HEADER_RESPONSE)
             val cookie = HttpConstants.encodeCookie(cookies)

@@ -18,6 +18,7 @@
 
     <string name="exit_hint">再按一次退出</string>
     <string name="network_error">网络连接不可用,请检查网络!</string>
+    <string name="business_error">业务处理失败,后台未返回具体原因!</string>
 
     <string name="user_name">用户名</string>
 

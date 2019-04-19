@@ -10,7 +10,6 @@ import io.reactivex.disposables.Disposable
 
 abstract class RxHttpObserver<T> : Observer<T> {
 
-
     override fun onSubscribe(d: Disposable) {
         if (!NetUtils.isConnected(WanApplication.instance)) {
             onError(RuntimeException(WanApplication.instance.getString(R.string.network_error)))
@@ -20,6 +19,22 @@ abstract class RxHttpObserver<T> : Observer<T> {
     override fun onError(e: Throwable) {
         e.message?.let {
             ExecutorUtils.main_thread(Runnable { ToastUtils.show(it) })
+        }
+    }
+
+    override fun onNext(t: T) {
+        //业务失败
+        val result = t as? HttpResponse<*>
+        if (result?.errorCode != 0) {
+            onError(
+                RuntimeException(
+                    if (result?.errorMsg.isNullOrBlank())
+                        WanApplication.instance.getString(R.string.business_error)
+                    else {
+                        result?.errorMsg
+                    }
+                )
+            )
         }
     }
 
