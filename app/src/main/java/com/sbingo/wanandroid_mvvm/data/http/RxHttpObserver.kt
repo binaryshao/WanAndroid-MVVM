@@ -2,6 +2,7 @@ package com.sbingo.wanandroid_mvvm.data.http
 
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.WanApplication
+import com.sbingo.wanandroid_mvvm.utils.ExecutorUtils
 import com.sbingo.wanandroid_mvvm.utils.NetUtils
 import com.sbingo.wanandroid_mvvm.utils.ToastUtils
 import io.reactivex.Observer
@@ -17,7 +18,11 @@ abstract class RxHttpObserver<T> : Observer<T> {
     }
 
     override fun onError(e: Throwable) {
-        e.message?.let { ToastUtils.show(it) }
+        e.message?.let {
+            ExecutorUtils.main_thread(Runnable { ToastUtils.show(it) })
+        }
     }
 
+    override fun onComplete() {
+    }
 }
