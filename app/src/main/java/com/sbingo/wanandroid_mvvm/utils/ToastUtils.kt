@@ -14,9 +14,6 @@ class ToastUtils {
         private var toast: Toast? = null
 
         fun show(content: String) {
-            if (toast != null) {
-                toast!!.cancel()
-            }
             val inflater = LayoutInflater.from(WanApplication.instance)
             val view = inflater.inflate(R.layout.toast_layout, null)
             val text = view.findViewById(R.id.toast_text) as TextView
