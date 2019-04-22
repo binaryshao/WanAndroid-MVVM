@@ -2,6 +2,8 @@ package com.sbingo.wanandroid_mvvm.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 
 /**
  * Author: Sbingo666
@@ -26,5 +28,23 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onStart()
         initData()
         subscribeUi()
+    }
+
+    protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
+        liveData.observe(this, Observer { result ->
+            if (result.isLoading()) {
+                showLoading()
+            } else if (result?.data != null && result.isSuccess()) {
+                finishLoading()
+                action(result.data)
+            } else {
+                finishLoading()
+            }
+        })
+
+    fun showLoading() {
+    }
+
+    fun finishLoading() {
     }
 }
