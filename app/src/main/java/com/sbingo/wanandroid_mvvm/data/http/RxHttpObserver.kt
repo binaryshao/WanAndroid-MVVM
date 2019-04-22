@@ -22,9 +22,9 @@ abstract class RxHttpObserver<T> : Observer<T> {
         }
     }
 
-    override fun onNext(t: T) {
+    override fun onNext(it: T) {
         //业务失败
-        val result = t as? HttpResponse<*>
+        val result = it as? HttpResponse<*>
         if (result?.errorCode != 0) {
             onError(
                 RuntimeException(
