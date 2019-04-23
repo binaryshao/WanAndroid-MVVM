@@ -5,9 +5,9 @@ package com.sbingo.wanandroid_mvvm.model
  * Author: Sbingo666
  * Date:   2019/4/4
  */
-data class ArticlePages(
+data class Page<T>(
     var curPage: Int,
-    var datas: List<Article>,
+    var datas: List<T>,
     var offset: Int,
     var pageCount: Int,
     var size: Int,
@@ -46,7 +46,7 @@ data class Tag(
     var url: String
 )
 
-data class WXChapters(
+data class Chapter(
     var courseId: Int,
     var id: Int,
     var name: String,

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sbingo.wanandroid_mvvm.base.RequestState
 import com.sbingo.wanandroid_mvvm.data.http.HttpManager
-import com.sbingo.wanandroid_mvvm.model.WXChapters
+import com.sbingo.wanandroid_mvvm.model.Chapter
 import com.sbingo.wanandroid_mvvm.utils.asyncSubscribe
 
 /**
@@ -13,8 +13,8 @@ import com.sbingo.wanandroid_mvvm.utils.asyncSubscribe
  */
 class WeChatRepository(private val httpManager: HttpManager) {
 
-    fun getWXChapters(): LiveData<RequestState<List<WXChapters>>> {
-        val liveData = MutableLiveData<RequestState<List<WXChapters>>>()
+    fun getWXChapters(): LiveData<RequestState<List<Chapter>>> {
+        val liveData = MutableLiveData<RequestState<List<Chapter>>>()
         liveData.value = RequestState.loading()
         httpManager.wanApi.getWXChapters()
             .asyncSubscribe({

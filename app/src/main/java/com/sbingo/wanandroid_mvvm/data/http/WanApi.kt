@@ -1,7 +1,8 @@
 package com.sbingo.wanandroid_mvvm.data.http
 
-import com.sbingo.wanandroid_mvvm.model.ArticlePages
-import com.sbingo.wanandroid_mvvm.model.WXChapters
+import com.sbingo.wanandroid_mvvm.model.Article
+import com.sbingo.wanandroid_mvvm.model.Chapter
+import com.sbingo.wanandroid_mvvm.model.Page
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,13 +17,13 @@ interface WanApi {
      * 首页文章列表
      */
     @GET("article/list/{pageNo}/json")
-    fun getArticles(@Path("pageNo") pageNo: Int): Observable<HttpResponse<ArticlePages>>
+    fun getArticles(@Path("pageNo") pageNo: Int): Observable<HttpResponse<Page<Article>>>
 
     /**
-     * 获取公众号列表
+     * 公众号列表
      */
     @GET("wxarticle/chapters/json")
-    fun getWXChapters(): Observable<HttpResponse<List<WXChapters>>>
+    fun getWXChapters(): Observable<HttpResponse<List<Chapter>>>
 
     /**
      * 查看某个公众号历史数据

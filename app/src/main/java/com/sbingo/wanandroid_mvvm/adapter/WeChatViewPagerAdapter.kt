@@ -5,7 +5,7 @@ import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.sbingo.wanandroid_mvvm.model.WXChapters
+import com.sbingo.wanandroid_mvvm.model.Chapter
 import com.sbingo.wanandroid_mvvm.ui.fragment.WXArticleFragment
 
 /**
@@ -15,7 +15,7 @@ import com.sbingo.wanandroid_mvvm.ui.fragment.WXArticleFragment
 class WeChatViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     private var fragments = mutableListOf<Fragment>()
-    private var list = mutableListOf<WXChapters>()
+    private var list = mutableListOf<Chapter>()
 
     override fun getItem(position: Int): Fragment = fragments[position]
 
@@ -24,7 +24,7 @@ class WeChatViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm
     override fun getPageTitle(position: Int): CharSequence? =
         HtmlCompat.fromHtml(list[position].name, FROM_HTML_MODE_LEGACY).toString()
 
-    fun setData(data: List<WXChapters>) {
+    fun setData(data: List<Chapter>) {
         list.run {
             clear()
             addAll(data)
