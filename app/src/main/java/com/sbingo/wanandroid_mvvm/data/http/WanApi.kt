@@ -6,6 +6,7 @@ import com.sbingo.wanandroid_mvvm.model.Page
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Author: Sbingo666
@@ -29,5 +30,17 @@ interface WanApi {
      * 查看某个公众号历史数据
      */
     @GET("wxarticle/list/{id}/{pageNo}/json")
-    fun getWXArticles(@Path("id") id: Int, @Path("pageNo") pageNo: Int): Observable<HttpResponse<ArticlePages>>
+    fun getWXArticles(@Path("id") id: Int, @Path("pageNo") pageNo: Int): Observable<HttpResponse<Page<Article>>>
+
+    /**
+     * 项目类目列表
+     */
+    @GET("project/tree/json")
+    fun getProjects(): Observable<HttpResponse<List<Chapter>>>
+
+    /**
+     * 项目文章列表
+     */
+    @GET("project/list/{pageNo}/json")
+    fun getProjectArticles(@Path("pageNo") pageNo: Int, @Query("cid") cid: Int): Observable<HttpResponse<Page<Article>>>
 }

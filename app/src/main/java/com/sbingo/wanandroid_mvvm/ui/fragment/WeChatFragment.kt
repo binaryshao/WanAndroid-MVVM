@@ -10,7 +10,7 @@ import com.sbingo.wanandroid_mvvm.base.BaseFragment
 import com.sbingo.wanandroid_mvvm.data.http.HttpManager
 import com.sbingo.wanandroid_mvvm.repository.WeChatRepository
 import com.sbingo.wanandroid_mvvm.viewmodel.WeChatViewModel
-import kotlinx.android.synthetic.main.fragment_wechat.*
+import kotlinx.android.synthetic.main.fragment_tab_vp.*
 
 /**
  * Author: Sbingo666
@@ -33,7 +33,7 @@ class WeChatFragment : BaseFragment() {
         WeChatViewPagerAdapter(childFragmentManager)
     }
 
-    override var layoutId = R.layout.fragment_wechat
+    override var layoutId = R.layout.fragment_tab_vp
 
     override fun initData() {
         viewPager.adapter = adapter
