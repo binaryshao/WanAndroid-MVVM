@@ -1,4 +1,4 @@
-package com.sbingo.wanandroid_mvvm.ui
+package com.sbingo.wanandroid_mvvm.ui.activity
 
 import android.view.KeyEvent
 import androidx.appcompat.app.ActionBarDrawerToggle

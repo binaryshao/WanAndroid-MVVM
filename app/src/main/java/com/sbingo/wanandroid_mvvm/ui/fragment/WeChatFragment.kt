@@ -3,6 +3,7 @@ package com.sbingo.wanandroid_mvvm.ui.fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.tabs.TabLayout
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.WeChatViewPagerAdapter
 import com.sbingo.wanandroid_mvvm.base.BaseFragment
@@ -36,7 +37,22 @@ class WeChatFragment : BaseFragment() {
 
     override fun initData() {
         viewPager.adapter = adapter
-        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.run {
+            setupWithViewPager(viewPager)
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                }
+
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.let {
+                        viewPager.setCurrentItem(it.position, false)
+                    }
+                }
+            })
+        }
     }
 
     override fun subscribeUi() {

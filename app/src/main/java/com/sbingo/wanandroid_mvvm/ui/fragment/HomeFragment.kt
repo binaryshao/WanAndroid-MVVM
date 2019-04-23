@@ -31,7 +31,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private val adapter by lazy {
-        HomeAdapter {viewModel.retry()}
+        HomeAdapter { viewModel.retry() }
     }
 
     override var layoutId = R.layout.refresh_layout
@@ -42,16 +42,18 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
-        viewModel.pagedList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        })
-        viewModel.refreshState.observe(
-            viewLifecycleOwner,
-            Observer { swipeRefreshLayout.isRefreshing = it.isLoading() })
-        viewModel.networkState.observe(viewLifecycleOwner, Observer {
-            adapter.setRequestState(it)
-        })
-        viewModel.setPageSize()
+        viewModel.run {
+            pagedList.observe(viewLifecycleOwner, Observer {
+                adapter.submitList(it)
+            })
+            refreshState.observe(
+                viewLifecycleOwner,
+                Observer { swipeRefreshLayout.isRefreshing = it.isLoading() })
+            networkState.observe(viewLifecycleOwner, Observer {
+                adapter.setRequestState(it)
+            })
+            setPageSize()
+        }
     }
 
     private fun initSwipe() {
