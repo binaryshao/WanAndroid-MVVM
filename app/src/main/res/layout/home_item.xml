@@ -23,9 +23,8 @@
                 android:padding="@dimen/dp_2"
                 android:text="@string/fresh"
                 android:textColor="@color/Red"
-                android:layout_marginBottom="@dimen/dp_10"
                 android:textSize="@dimen/sp_10"
-                app:layout_constraintBottom_toTopOf="@id/thumbnail"
+                app:layout_constraintBottom_toBottomOf="@+id/author"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -33,7 +32,7 @@
                 android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/fresh"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/app_name"
                 android:layout_marginStart="@dimen/dp_10"
                 app:layout_goneMarginStart="@dimen/dp_0"
@@ -44,7 +43,8 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@id/fresh"
+                app:layout_constraintBottom_toBottomOf="@id/author"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="2999-09-09"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="@dimen/sp_12"/>
@@ -55,12 +55,12 @@
                 android:layout_height="wrap_content"
                 tools:text="@string/app_name"
                 app:layout_constraintStart_toEndOf="@+id/thumbnail"
-                app:layout_constraintBottom_toTopOf="@+id/chapter"
+                app:layout_constraintBottom_toTopOf="@+id/desc"
                 android:layout_marginStart="@dimen/dp_10"
                 app:layout_goneMarginStart="@dimen/dp_0"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
-                app:layout_constraintTop_toBottomOf="@+id/fresh"
+                app:layout_constraintTop_toBottomOf="@id/author"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textColor="@color/textColorPrimary"
                 android:maxLines="2"
@@ -68,13 +68,29 @@
                 android:lineSpacingExtra="@dimen/dp_4"
                 android:textSize="@dimen/sp_14"/>
 
+        <TextView
+                android:id="@+id/desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                android:textSize="@dimen/dp_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/chapter"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:lineSpacingExtra="@dimen/dp_4"
+                tools:text="@string/app_name"/>
+
         <ImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="@dimen/dp_120"
-                android:layout_marginTop="@dimen/dp_10"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/author"
+                app:layout_constraintBottom_toTopOf="@id/chapter"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
                 android:scaleType="centerCrop"
                 android:layout_height="@dimen/dp_100"/>
 
@@ -83,9 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="@string/app_name"
-                android:layout_marginTop="@dimen/dp_10"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/thumbnail"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="@dimen/sp_12"/>
 

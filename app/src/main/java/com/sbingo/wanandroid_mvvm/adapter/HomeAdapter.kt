@@ -30,21 +30,23 @@ class HomeAdapter(retryCallback: () -> Unit) : BasePagingAdapter<Article>(diffCa
     override fun bind(holder: ViewHolder, item: Article, position: Int) {
         holder.run {
             toVisibility(R.id.fresh, item.fresh)
-            toVisibility(R.id.thumbnail, item.envelopePic.isNotEmpty())
+            toVisibility(R.id.thumbnail, item.envelopePic.isNotBlank())
+            toVisibility(R.id.desc, item.desc.isNotBlank())
             setText(R.id.author, item.author)
             setText(R.id.date, item.niceDate)
             setText(R.id.title, HtmlCompat.fromHtml(item.title, FROM_HTML_MODE_LEGACY).toString())
             setText(
                 R.id.chapter, when {
-                    item.superChapterName.isNotEmpty() and item.chapterName.isNotEmpty() ->
+                    item.superChapterName.isNotBlank() and item.chapterName.isNotBlank() ->
                         "${item.superChapterName} / ${item.chapterName}"
-                    item.superChapterName.isNotEmpty() -> item.superChapterName
-                    item.chapterName.isNotEmpty() -> item.chapterName
+                    item.superChapterName.isNotBlank() -> item.superChapterName
+                    item.chapterName.isNotBlank() -> item.chapterName
                     else -> ""
                 }
             )
+            setText(R.id.desc, item.desc)
         }
-        if (item.envelopePic.isNotEmpty()) {
+        if (item.envelopePic.isNotBlank()) {
             context.run { ImageLoader.load(context, item.envelopePic, holder.getView(R.id.thumbnail) as ImageView) }
         }
     }
