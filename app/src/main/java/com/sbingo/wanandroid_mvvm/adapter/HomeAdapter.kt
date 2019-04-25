@@ -1,12 +1,15 @@
 package com.sbingo.wanandroid_mvvm.adapter
 
+import android.content.Intent
 import android.widget.ImageView
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.recyclerview.widget.DiffUtil
+import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.base.paging.BasePagingAdapter
 import com.sbingo.wanandroid_mvvm.model.Article
+import com.sbingo.wanandroid_mvvm.ui.activity.WebActivity
 import com.sbingo.wanandroid_mvvm.utils.ImageLoader
 
 /**
@@ -47,7 +50,14 @@ class HomeAdapter(retryCallback: () -> Unit) : BasePagingAdapter<Article>(diffCa
             setText(R.id.desc, item.desc)
         }
         if (item.envelopePic.isNotBlank()) {
-            context.run { ImageLoader.load(context, item.envelopePic, holder.getView(R.id.thumbnail) as ImageView) }
+            context.let { ImageLoader.load(it, item.envelopePic, holder.getView(R.id.thumbnail) as ImageView) }
+        }
+        holder.itemView.setOnClickListener {
+            Intent(context, WebActivity::class.java).run {
+                putExtra(Constants.WEB_TITLE, item.title)
+                putExtra(Constants.WEB_URL, item.link)
+                context.startActivity(this)
+            }
         }
     }
 }
