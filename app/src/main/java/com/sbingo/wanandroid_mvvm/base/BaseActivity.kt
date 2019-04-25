@@ -1,6 +1,7 @@
 package com.sbingo.wanandroid_mvvm.base
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -24,6 +25,13 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         initData()
         subscribeUi()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
