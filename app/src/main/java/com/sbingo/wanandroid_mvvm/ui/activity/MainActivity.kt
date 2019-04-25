@@ -32,10 +32,11 @@ class MainActivity : BaseActivity() {
     override var layoutId = R.layout.activity_main
 
     override fun initData() {
+        setSupportActionBar(toolbar)
         initDrawerLayout()
         initNav()
         initNavBottom()
-        initView()
+        bottomNav()
     }
 
     override fun subscribeUi() {
@@ -96,11 +97,6 @@ class MainActivity : BaseActivity() {
             labelVisibilityMode = LABEL_VISIBILITY_LABELED
             setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         }
-    }
-
-    private fun initView() {
-        setSupportActionBar(toolbar)
-        bottomNav()
     }
 
     private fun bottomNav() {
