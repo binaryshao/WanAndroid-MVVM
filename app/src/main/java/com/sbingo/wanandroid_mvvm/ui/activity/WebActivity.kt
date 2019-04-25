@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
+import android.webkit.WebView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.just.agentweb.AgentWeb
@@ -39,10 +40,7 @@ class WebActivity : BaseActivity() {
         tv_title.apply {
             visibility = View.VISIBLE
             text = getString(R.string.loading)
-            postDelayed({
-                isSelected = true
-                text = webTitle
-            }, 2000)
+            isSelected = true
         }
         intent.extras?.let {
             webTitle = it.getString(Constants.WEB_TITLE, getString(R.string.title_err))
@@ -63,6 +61,7 @@ class WebActivity : BaseActivity() {
             .setAgentWebParent(web_container, 1, layoutParams)
             .useDefaultIndicator()
             .setWebView(mWebView)
+            .setWebChromeClient(webChromeClient)
             .setMainFrameErrorView(R.layout.web_error_page, -1)
             .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
             .createAgentWeb()
@@ -107,6 +106,13 @@ class WebActivity : BaseActivity() {
     override fun onDestroy() {
         agentWeb?.webLifeCycle?.onDestroy()
         super.onDestroy()
+    }
+
+    private val webChromeClient = object : com.just.agentweb.WebChromeClient() {
+        override fun onReceivedTitle(view: WebView, title: String) {
+            super.onReceivedTitle(view, title)
+            tv_title.text = title
+        }
     }
 
 }
