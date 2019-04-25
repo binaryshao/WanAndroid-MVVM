@@ -37,14 +37,18 @@ class WebActivity : BaseActivity() {
             setSupportActionBar(this)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
+        iv_close.apply {
+            visibility = View.VISIBLE
+            setOnClickListener { finish() }
+        }
         tv_title.apply {
             visibility = View.VISIBLE
             text = getString(R.string.loading)
             isSelected = true
         }
-        intent.extras?.let {
-            webTitle = it.getString(Constants.WEB_TITLE, getString(R.string.title_err))
-            webUrl = it.getString(Constants.WEB_URL, "")
+        intent.extras?.apply {
+            webTitle = getString(Constants.WEB_TITLE, getString(R.string.title_err))
+            webUrl = getString(Constants.WEB_URL, "")
         }
         initWebView()
     }

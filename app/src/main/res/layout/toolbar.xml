@@ -16,6 +16,14 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_close"
+                app:srcCompat="@drawable/ic_close"
+                android:layout_width="wrap_content"
+                android:layout_marginRight="@dimen/dp_10"
+                android:visibility="gone"
+                android:layout_height="wrap_content"/>
+
         <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
