@@ -22,10 +22,6 @@ abstract class BaseActivity : AppCompatActivity() {
         if (this !is BaseBindingActivity<*>) {
             setContentView(layoutId)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
         initData()
         subscribeUi()
     }

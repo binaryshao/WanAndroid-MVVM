@@ -1,6 +1,5 @@
 package com.sbingo.wanandroid_mvvm.base
 
-import android.os.Bundle
 import androidx.databinding.ViewDataBinding
 
 /**
@@ -11,12 +10,6 @@ abstract class BaseBindingFragment<T : ViewDataBinding> : BaseFragment() {
 
     override var layoutId = 0
 
-    protected abstract fun initBinding(): T
+    protected abstract var binding: T
 
-    lateinit var binding: T
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = initBinding()
-    }
 }
