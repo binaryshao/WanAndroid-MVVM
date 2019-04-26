@@ -2,6 +2,7 @@ package com.sbingo.wanandroid_mvvm.data.http
 
 import com.sbingo.wanandroid_mvvm.model.Article
 import com.sbingo.wanandroid_mvvm.model.Chapter
+import com.sbingo.wanandroid_mvvm.model.Navigation
 import com.sbingo.wanandroid_mvvm.model.Page
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -43,4 +44,23 @@ interface WanApi {
      */
     @GET("project/list/{pageNo}/json")
     fun getProjectArticles(@Path("pageNo") pageNo: Int, @Query("cid") cid: Int): Observable<HttpResponse<Page<Article>>>
+
+    /**
+     * 导航数据
+     */
+    @GET("navi/json")
+    fun getProjectArticles(): Observable<HttpResponse<List<Navigation>>>
+
+    /**
+     * 知识体系
+     */
+    @GET("tree/json")
+    fun getKnowledgeTree(): Observable<HttpResponse<List<Chapter>>>
+
+    /**
+     * 知识体系文章列表
+     */
+    @GET("article/list/{pageNo}/json")
+    fun getKnowledgeArticles(@Path("pageNo") pageNo: Int, @Query("cid") cid: Int): Observable<HttpResponse<Page<Article>>>
+
 }

@@ -47,6 +47,7 @@ data class Tag(
 )
 
 data class Chapter(
+    var children: List<Chapter>,
     var courseId: Int,
     var id: Int,
     var name: String,
@@ -54,4 +55,10 @@ data class Chapter(
     var parentChapterId: Int,
     var userControlSetTop: Boolean,
     var visible: Int
+)
+
+data class Navigation(
+    var articles: List<Article>,
+    var cid: Int,
+    var name: String
 )
