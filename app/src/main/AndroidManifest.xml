@@ -28,6 +28,8 @@
 
         <activity android:name=".ui.activity.WebActivity"/>
 
+        <activity android:name=".ui.activity.KnowledgeActivity"/>
+
     </application>
 
 </manifest>

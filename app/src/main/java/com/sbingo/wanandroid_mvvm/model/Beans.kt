@@ -1,5 +1,7 @@
 package com.sbingo.wanandroid_mvvm.model
 
+import java.io.Serializable
+
 
 /**
  * Author: Sbingo666
@@ -55,7 +57,7 @@ data class Chapter(
     var parentChapterId: Int,
     var userControlSetTop: Boolean,
     var visible: Int
-)
+) : Serializable
 
 data class Navigation(
     var articles: List<Article>,

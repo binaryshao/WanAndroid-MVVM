@@ -8,4 +8,6 @@ object Constants {
 
     const val WEB_TITLE = "web_title"
     const val WEB_URL = "web_url"
+
+    const val KNOWLEDGE = "knowledge"
 }
