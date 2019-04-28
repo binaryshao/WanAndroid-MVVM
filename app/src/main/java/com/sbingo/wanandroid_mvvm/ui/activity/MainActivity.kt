@@ -1,6 +1,8 @@
 package com.sbingo.wanandroid_mvvm.ui.activity
 
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -162,4 +164,18 @@ class MainActivity : BaseActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_activity_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.search -> {
+                ToastUtils.show("to be completed")
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
