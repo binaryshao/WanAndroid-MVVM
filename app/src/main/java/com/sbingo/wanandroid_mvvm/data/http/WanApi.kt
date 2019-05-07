@@ -22,6 +22,12 @@ interface WanApi {
     fun getArticles(@Path("pageNo") pageNo: Int): Observable<HttpResponse<Page<Article>>>
 
     /**
+     * 置顶文章列表
+     */
+    @GET("article/top/json")
+    fun getTopArticles(): Observable<HttpResponse<List<Article>>>
+
+    /**
      * 公众号列表
      */
     @GET("wxarticle/chapters/json")

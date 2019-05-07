@@ -16,6 +16,19 @@
             android:layout_height="match_parent">
 
         <TextView
+                android:id="@+id/on_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_fresh"
+                android:padding="@dimen/dp_2"
+                android:text="@string/on_top"
+                android:textColor="@color/Red"
+                android:textSize="@dimen/sp_10"
+                app:layout_constraintBottom_toBottomOf="@+id/author"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
                 android:id="@+id/fresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -24,8 +37,10 @@
                 android:text="@string/fresh"
                 android:textColor="@color/Red"
                 android:textSize="@dimen/sp_10"
+                android:layout_marginStart="@dimen/dp_10"
+                app:layout_goneMarginStart="@dimen/dp_0"
                 app:layout_constraintBottom_toBottomOf="@+id/author"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/on_top"
                 app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView

@@ -2,8 +2,12 @@ package com.sbingo.wanandroid_mvvm.paging.source
 
 import com.sbingo.wanandroid_mvvm.base.paging.BaseItemKeyedDataSource
 import com.sbingo.wanandroid_mvvm.data.http.HttpManager
+import com.sbingo.wanandroid_mvvm.data.http.HttpResponse
 import com.sbingo.wanandroid_mvvm.model.Article
+import com.sbingo.wanandroid_mvvm.model.Page
 import com.sbingo.wanandroid_mvvm.utils.asyncSubscribe
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 /**
  * Author: Sbingo666
@@ -27,7 +31,14 @@ class HomeDataSource(private val httpManager: HttpManager) : BaseItemKeyedDataSo
     }
 
     override fun onLoadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Article>) {
-        httpManager.wanApi.getArticles(pageNo)
+        Observable.zip(httpManager.wanApi.getTopArticles(), httpManager.wanApi.getArticles(pageNo),
+            BiFunction<HttpResponse<List<Article>>, HttpResponse<Page<Article>>, HttpResponse<Page<Article>>> { t1, t2 ->
+                t1.data?.let {
+                    it.forEach { it.isTop = true }
+                    t2.data?.datas?.addAll(0, it)
+                }
+                t2
+            })
             .asyncSubscribe({
                 pageNo = it.data?.curPage!!
                 refreshSuccess()

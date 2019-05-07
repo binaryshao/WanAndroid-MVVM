@@ -35,6 +35,7 @@ class HomeAdapter(retryCallback: () -> Unit) : BasePagingAdapter<Article>(diffCa
             toVisibility(R.id.fresh, item.fresh)
             toVisibility(R.id.thumbnail, item.envelopePic.isNotBlank())
             toVisibility(R.id.desc, item.desc.isNotBlank())
+            toVisibility(R.id.on_top, item.isTop)
             setText(R.id.author, item.author)
             setText(R.id.date, item.niceDate)
             setText(R.id.title, HtmlCompat.fromHtml(item.title, FROM_HTML_MODE_LEGACY).toString())

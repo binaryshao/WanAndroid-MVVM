@@ -9,7 +9,7 @@ import java.io.Serializable
  */
 data class Page<T>(
     var curPage: Int,
-    var datas: List<T>,
+    var datas: MutableList<T>,
     var offset: Int,
     var pageCount: Int,
     var size: Int,
@@ -40,7 +40,8 @@ data class Article(
     var userId: Int,
     var visible: Int,
     var zan: Int,
-    var tags: List<Tag>
+    var tags: List<Tag>,
+    var isTop: Boolean
 )
 
 data class Tag(
