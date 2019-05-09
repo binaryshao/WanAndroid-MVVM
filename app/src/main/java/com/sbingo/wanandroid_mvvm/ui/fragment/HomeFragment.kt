@@ -52,13 +52,18 @@ class HomeFragment : BaseFragment() {
             networkState.observe(viewLifecycleOwner, Observer {
                 adapter.setRequestState(it)
             })
+            handleData(viewModel.getBanner()) {
+                adapter.setBannerData(it)
+            }
             setPageSize()
         }
     }
 
     private fun initSwipe() {
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE)
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
     }
 
     private fun initRecyclerView() {

@@ -1,9 +1,6 @@
 package com.sbingo.wanandroid_mvvm.data.http
 
-import com.sbingo.wanandroid_mvvm.model.Article
-import com.sbingo.wanandroid_mvvm.model.Chapter
-import com.sbingo.wanandroid_mvvm.model.Navigation
-import com.sbingo.wanandroid_mvvm.model.Page
+import com.sbingo.wanandroid_mvvm.model.*
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,6 +23,12 @@ interface WanApi {
      */
     @GET("article/top/json")
     fun getTopArticles(): Observable<HttpResponse<List<Article>>>
+
+    /**
+     * 首页 banner
+     */
+    @GET("banner/json")
+    fun getBanner(): Observable<HttpResponse<List<Banner>>>
 
     /**
      * 公众号列表

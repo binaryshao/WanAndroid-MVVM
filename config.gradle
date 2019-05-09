@@ -41,6 +41,7 @@ ext {
             "logger"                 : "com.orhanobut:logger:1.15",
             "agentweb"               : "com.just.agentweb:agentweb:4.0.3-alpha@aar",
             "flowlayout"             : "com.hyman:flowlayout-lib:1.1.2",
+            "banner"                 : 'cn.bingoogolapple:bga-banner:2.2.6@aar',
     ]
 
     libraries = depend.values()
