@@ -10,7 +10,6 @@ import com.sbingo.wanandroid_mvvm.adapter.HomeAdapter
 import com.sbingo.wanandroid_mvvm.base.BaseFragment
 import com.sbingo.wanandroid_mvvm.data.http.HttpManager
 import com.sbingo.wanandroid_mvvm.paging.repository.HomeRepository
-import com.sbingo.wanandroid_mvvm.utils.ExecutorUtils
 import com.sbingo.wanandroid_mvvm.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.refresh_layout.*
 
@@ -46,7 +45,6 @@ class HomeFragment : BaseFragment() {
         viewModel.run {
             pagedList.observe(viewLifecycleOwner, Observer {
                 adapter.submitList(it)
-                ExecutorUtils.main_thread(Runnable { recyclerView.smoothScrollToPosition(0) }, 600)
             })
             refreshState.observe(
                 viewLifecycleOwner,
@@ -54,9 +52,6 @@ class HomeFragment : BaseFragment() {
             networkState.observe(viewLifecycleOwner, Observer {
                 adapter.setRequestState(it)
             })
-            handleData(viewModel.getBanner()) {
-                adapter.setBannerData(it)
-            }
             setPageSize()
         }
     }

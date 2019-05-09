@@ -1,23 +1,15 @@
 package com.sbingo.wanandroid_mvvm.base.paging
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import cn.bingoogolapple.bgabanner.BGABanner
-import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.base.RequestState
-import com.sbingo.wanandroid_mvvm.model.Banner
-import com.sbingo.wanandroid_mvvm.ui.activity.WebActivity
-import com.sbingo.wanandroid_mvvm.utils.ImageLoader
-import io.reactivex.Observable
 
 /**
  * Author: Sbingo666
@@ -27,17 +19,13 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
     PagedListAdapter<T, BasePagingAdapter.ViewHolder>(diffCallback) {
 
     private val TYPE_ITEM = 0
-    private val TYPE_BANNER = 1
-    private val TYPE_FOOTER = 2
+    private val TYPE_FOOTER = 1
     private var requestState: RequestState<Any>? = null
     lateinit var context: Context
-    private var hasBannerView = false
-    private var bannerData: List<Banner>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
         return when (viewType) {
-            TYPE_BANNER -> BannerViewHolder.create(parent, bannerData!!)
             TYPE_ITEM -> ViewHolder(LayoutInflater.from(context).inflate(getItemLayout(), parent, false))
             TYPE_FOOTER -> FooterViewHolder.create(parent, retryCallback)
             else -> throw IllegalArgumentException("未知 view type = $viewType")
@@ -46,13 +34,7 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            TYPE_BANNER -> {
-                (holder as BannerViewHolder).bind()
-            }
-            TYPE_ITEM -> {
-                val p = if (hasBannerView) position - 1 else position
-                bind(holder, getItem(p)!!, p)
-            }
+            TYPE_ITEM -> bind(holder, getItem(position)!!, position)
             TYPE_FOOTER -> (holder as FooterViewHolder).bindTo(requestState)
         }
     }
@@ -109,44 +91,6 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         }
     }
 
-    class BannerViewHolder(view: View, private val bannerData: List<Banner>) : ViewHolder(view) {
-        fun bind() {
-            val banner = getView(R.id.banner) as BGABanner
-            banner.run {
-                setAdapter { _, itemView, model, _ ->
-                    ImageLoader.load(this.context, model as String?, itemView as ImageView?)
-                }
-                setDelegate { _, _, _, position ->
-                    if (bannerData.isNotEmpty()) {
-                        val item = bannerData[position]
-                        Intent(context, WebActivity::class.java).run {
-                            putExtra(Constants.WEB_TITLE, item.title)
-                            putExtra(Constants.WEB_URL, item.url)
-                            context.startActivity(this)
-                        }
-                    }
-                }
-                val imageList = ArrayList<String>()
-                val titleList = ArrayList<String>()
-                Observable.fromIterable(bannerData)
-                    .subscribe { list ->
-                        imageList.add(list.imagePath)
-                        titleList.add(list.title)
-                    }
-                setAutoPlayAble(imageList.size > 1)
-                setData(imageList, titleList)
-            }
-        }
-
-        companion object {
-            fun create(parent: ViewGroup, bannerData: List<Banner>): BannerViewHolder {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.banner_layout, parent, false)
-                return BannerViewHolder(view, bannerData)
-            }
-        }
-    }
-
     private fun hasFooter() =
         if (requestState == null)
             false
@@ -155,9 +99,7 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         }
 
     override fun getItemViewType(position: Int): Int {
-        return if (hasBannerView && position == 0) {
-            TYPE_BANNER
-        } else if (hasFooter() && position == itemCount - 1) {
+        return if (hasFooter() && position == itemCount - 1) {
             TYPE_FOOTER
         } else {
             TYPE_ITEM
@@ -165,8 +107,7 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
     }
 
     override fun getItemCount(): Int {
-        val i = super.getItemCount() + if (hasFooter()) 1 else 0
-        return i + if (hasBannerView) 1 else 0
+        return super.getItemCount() + if (hasFooter()) 1 else 0
     }
 
     fun setRequestState(newRequestState: RequestState<Any>) {
@@ -183,12 +124,6 @@ abstract class BasePagingAdapter<T>(diffCallback: DiffUtil.ItemCallback<T>, priv
         } else if (hasExtraRow && previousState != newRequestState) {
             notifyItemChanged(itemCount - 1)
         }
-    }
-
-    fun setBannerData(data: List<Banner>?) {
-        hasBannerView = data != null && data.isNotEmpty()
-        bannerData = data
-        notifyDataSetChanged()
     }
 
     abstract fun getItemLayout(): Int

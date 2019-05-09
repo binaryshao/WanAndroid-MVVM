@@ -41,7 +41,8 @@ data class Article(
     var visible: Int,
     var zan: Int,
     var tags: List<Tag>,
-    var isTop: Boolean
+    var isTop: Boolean,
+    var bannerData: List<Banner>
 )
 
 data class Tag(
@@ -67,12 +68,12 @@ data class Navigation(
 )
 
 data class Banner(
-    var desc:String,
-    var id:Int,
-    var imagePath:String,
-    var isVisible:Int,
-    var order:Int,
-    var title:String,
-    var type:Int,
-    var url:String
+    var desc: String,
+    var id: Int,
+    var imagePath: String,
+    var isVisible: Int,
+    var order: Int,
+    var title: String,
+    var type: Int,
+    var url: String
 )

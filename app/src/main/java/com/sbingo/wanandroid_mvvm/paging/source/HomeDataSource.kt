@@ -4,10 +4,11 @@ import com.sbingo.wanandroid_mvvm.base.paging.BaseItemKeyedDataSource
 import com.sbingo.wanandroid_mvvm.data.http.HttpManager
 import com.sbingo.wanandroid_mvvm.data.http.HttpResponse
 import com.sbingo.wanandroid_mvvm.model.Article
+import com.sbingo.wanandroid_mvvm.model.Banner
 import com.sbingo.wanandroid_mvvm.model.Page
 import com.sbingo.wanandroid_mvvm.utils.asyncSubscribe
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 
 /**
  * Author: Sbingo666
@@ -31,13 +32,22 @@ class HomeDataSource(private val httpManager: HttpManager) : BaseItemKeyedDataSo
     }
 
     override fun onLoadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Article>) {
-        Observable.zip(httpManager.wanApi.getTopArticles(), httpManager.wanApi.getArticles(pageNo),
-            BiFunction<HttpResponse<List<Article>>, HttpResponse<Page<Article>>, HttpResponse<Page<Article>>> { t1, t2 ->
+        Observable.zip(httpManager.wanApi.getBanner(),
+            httpManager.wanApi.getTopArticles(),
+            httpManager.wanApi.getArticles(pageNo),
+            Function3<HttpResponse<List<Banner>>, HttpResponse<List<Article>>, HttpResponse<Page<Article>>, HttpResponse<Page<Article>>>
+            { t1, t2, t3 ->
                 t1.data?.let {
-                    it.forEach { it.isTop = true }
-                    t2.data?.datas?.addAll(0, it)
+                    //动态构造一个 Article，将 banner 数据放入其中
+                    val article = t3.data?.datas!![0]
+                    article.bannerData = it
+                    t3.data?.datas?.add(0, article)
                 }
-                t2
+                t2.data?.let {
+                    it.forEach { it.isTop = true }
+                    t3.data?.datas?.addAll(1, it)
+                }
+                t3
             })
             .asyncSubscribe({
                 pageNo = it.data?.curPage!!
