@@ -10,8 +10,8 @@ object ExecutorUtils {
 
     val NETWORK_IO = Executors.newFixedThreadPool(5)
 
-    fun main_thread(runnable: Runnable) {
+    fun main_thread(runnable: Runnable, delay: Long = 0) {
         Handler(Looper.getMainLooper())
-            .post(runnable)
+            .postDelayed(runnable, delay)
     }
 }
