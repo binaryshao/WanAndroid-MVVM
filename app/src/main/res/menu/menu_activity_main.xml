@@ -3,6 +3,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/scan"
+            android:icon="@drawable/ic_scan"
+            android:title="@string/scan_result"
+            app:showAsAction="always|collapseActionView"/>
+
+    <item
             android:id="@+id/search"
             android:icon="@drawable/ic_search"
             android:title="@string/search"

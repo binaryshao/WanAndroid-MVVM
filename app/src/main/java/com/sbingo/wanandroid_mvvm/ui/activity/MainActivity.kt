@@ -1,5 +1,6 @@
 package com.sbingo.wanandroid_mvvm.ui.activity
 
+import android.content.Intent
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -171,6 +172,10 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.scan -> {
+                startActivity(Intent(this, ScanActivity::class.java))
+                return true
+            }
             R.id.search -> {
                 ToastUtils.show("to be completed")
                 return true

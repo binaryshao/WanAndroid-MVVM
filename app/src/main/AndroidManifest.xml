@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
             android:name=".WanApplication"
@@ -29,6 +30,8 @@
         <activity android:name=".ui.activity.WebActivity"/>
 
         <activity android:name=".ui.activity.KnowledgeActivity"/>
+
+        <activity android:name=".ui.activity.ScanActivity"/>
 
     </application>
 
