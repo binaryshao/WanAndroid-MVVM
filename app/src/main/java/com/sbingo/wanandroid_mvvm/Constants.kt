@@ -10,4 +10,6 @@ object Constants {
     const val WEB_URL = "web_url"
 
     const val KNOWLEDGE = "knowledge"
+
+    const val PERMISSION_CODE = 100
 }
