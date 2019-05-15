@@ -30,6 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private lateinit var permissionListener: Listeners.PermissionListener
     private lateinit var deniedPermissions: HashMap<String, Array<String>>
+    private var showPermissionDialogOnDenied: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,15 +90,16 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                 }
                 if (permissionsSb.isNotBlank() && reasonsSb.isNotBlank()) {
+                    showPermissionDialogOnDenied = false
                     permissionsSb.deleteCharAt(permissionsSb.length - 1)
                     reasonsSb.deleteCharAt(reasonsSb.length - 1)
                     showPermissionDeniedDialog(permissionsSb.toString(), reasonsSb.toString()) {
                         requestPermissions(deniedPermissions.keys.toTypedArray(), Constants.PERMISSION_CODE)
                         permissionListener.onShowReason()
                     }
-                    return
+                } else {
+                    requestPermissions(deniedPermissions.keys.toTypedArray(), Constants.PERMISSION_CODE)
                 }
-                requestPermissions(deniedPermissions.keys.toTypedArray(), Constants.PERMISSION_CODE)
             }
         }
     }
@@ -119,12 +121,15 @@ abstract class BaseActivity : AppCompatActivity() {
                     deniedAgainPermissions.forEach { now ->
                         deniedPermissions.forEach { old ->
                             if (now == old.key) {
-                                permissionListener.onDenied(deniedAgainPermissions)
-                                return
+                                if (showPermissionDialogOnDenied) {
+                                    showPermissionDeniedDialog(old.value[0], old.value[1]) { permissionListener.onDenied(deniedAgainPermissions) }
+                                } else {
+                                    showPermissionDialogOnDenied = true
+                                    permissionListener.onDenied(deniedAgainPermissions)
+                                }
                             }
                         }
                     }
-                    permissionListener.onDenied(deniedAgainPermissions)
                 }
             }
         }
