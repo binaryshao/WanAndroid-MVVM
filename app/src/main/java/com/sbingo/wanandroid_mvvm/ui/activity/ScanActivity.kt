@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.base.BaseActivity
 import com.sbingo.wanandroid_mvvm.utils.Listeners
+import com.sbingo.wanandroid_mvvm.utils.ToastUtils
 import me.dm7.barcodescanner.zbar.ZBarScannerView
 
 /**
@@ -43,6 +44,7 @@ class ScanActivity : BaseActivity(), ZBarScannerView.ResultHandler {
                 }
 
                 override fun onDenied(permissions: List<String>) {
+                    ToastUtils.show(getString(R.string.no_permission))
                     finish()
                 }
 

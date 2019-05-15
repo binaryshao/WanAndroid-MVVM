@@ -5,7 +5,7 @@
     <item
             android:id="@+id/scan"
             android:icon="@drawable/ic_scan"
-            android:title="@string/scan_result"
+            android:title="@string/scan"
             app:showAsAction="always|collapseActionView"/>
 
     <item

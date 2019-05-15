@@ -79,17 +79,24 @@ abstract class BaseActivity : AppCompatActivity() {
             if (deniedPermissions.isEmpty()) {
                 permissionListener.onGranted()
             } else {
+                val permissionsSb = StringBuilder()
+                val reasonsSb = StringBuilder()
                 deniedPermissions.forEach {
                     if (shouldShowRequestPermissionRationale(it.key)) {
-                        //用户拒绝过权限该方法就会返回 true
-                        showPermissionDeniedDialog(it.value[0], it.value[1]) {
-                            requestPermissions(deniedPermissions.keys.toTypedArray(), Constants.PERMISSION_CODE)
-                            permissionListener.onShowReason()
-                        }
-                        return
+                        //用户拒绝过权限该方法就会返回 true，选择不再提示后返回 false
+                        permissionsSb.append(it.value[0]).append(",")
+                        reasonsSb.append(it.value[1]).append("\n")
                     }
                 }
-                //选择不再提示再请求后，不会有请求提示，会直接收到拒绝回调
+                if (permissionsSb.isNotBlank() && reasonsSb.isNotBlank()) {
+                    permissionsSb.deleteCharAt(permissionsSb.length - 1)
+                    reasonsSb.deleteCharAt(reasonsSb.length - 1)
+                    showPermissionDeniedDialog(permissionsSb.toString(), reasonsSb.toString()) {
+                        requestPermissions(deniedPermissions.keys.toTypedArray(), Constants.PERMISSION_CODE)
+                        permissionListener.onShowReason()
+                    }
+                    return
+                }
                 requestPermissions(deniedPermissions.keys.toTypedArray(), Constants.PERMISSION_CODE)
             }
         }
@@ -112,7 +119,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     deniedAgainPermissions.forEach { now ->
                         deniedPermissions.forEach { old ->
                             if (now == old.key) {
-                                showPermissionDeniedDialog(old.value[0], old.value[1]) { permissionListener.onDenied(deniedAgainPermissions) }
+                                permissionListener.onDenied(deniedAgainPermissions)
                                 return
                             }
                         }
@@ -125,7 +132,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun showPermissionDeniedDialog(p: String, reason: String, action: () -> Unit) {
         AlertDialog.Builder(this)
-            .setTitle(String.format("缺少【%s】权限", p))
+            .setTitle("缺少【$p】权限")
             .setMessage(reason)
             .setCancelable(false)
             .setPositiveButton(
