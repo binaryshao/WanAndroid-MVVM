@@ -58,7 +58,6 @@ class WeChatFragment : BaseFragment() {
     override fun subscribeUi() {
         handleData(viewModel.wxChapters) {
             adapter.setData(it)
-            viewPager.offscreenPageLimit = it.size
         }
     }
 }

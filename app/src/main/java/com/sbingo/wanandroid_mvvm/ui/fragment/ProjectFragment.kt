@@ -58,7 +58,6 @@ class ProjectFragment : BaseFragment() {
     override fun subscribeUi() {
         handleData(viewModel.projects) {
             adapter.setData(it)
-            viewPager.offscreenPageLimit = it.size
         }
     }
 }

@@ -50,7 +50,6 @@ class KnowledgeActivity : BaseActivity() {
         }
         knowledge.let {
             adapter.setData(it.children)
-            viewPager.offscreenPageLimit = it.children.size
         }
     }
 
