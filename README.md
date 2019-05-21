@@ -13,6 +13,12 @@
 - Paging
 - Room (以后可能会用到)
 
+### 架构图
+<img src="https://github.com/Sbingo/WanAndroid-MVVM/blob/master/images/arc.PNG">
+
+### 技术分析
+[MVVM 架构解析及 Jetpack 架构组件的使用](https://blog.csdn.net/recordGrowth/article/details/90377318)
+
 ### 效果图
 <img src="https://github.com/Sbingo/WanAndroid-MVVM/blob/master/images/wan9.png" width=400> <img src="https://github.com/Sbingo/WanAndroid-MVVM/blob/master/images/wan8.png" width=400>
 
