@@ -3,8 +3,6 @@
 
 持续更新ing~
 
-后续有时间再根据本项目分析 MVVM 架构，敬请关注~
-
 ### Jetpack 使用情况
 - DataBinding
 - Navigation
