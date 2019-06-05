@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.just.agentweb.AgentWeb
@@ -26,6 +27,7 @@ class WebActivity : BaseActivity() {
     private var agentWeb: AgentWeb? = null
     private lateinit var webTitle: String
     private lateinit var webUrl: String
+    private lateinit var errorMsg: TextView
     private val mWebView: NestedScrollAgentWebView by lazy {
         NestedScrollAgentWebView(this)
     }
@@ -60,13 +62,16 @@ class WebActivity : BaseActivity() {
         val layoutParams =
             CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         layoutParams.behavior = AppBarLayout.ScrollingViewBehavior()
+        val errorView = layoutInflater.inflate(R.layout.web_error_page, null)
+        errorMsg = errorView.findViewById(R.id.error_msg)
+        errorMsg.text = getString(R.string.web_page_err, webUrl)
 
         agentWeb = AgentWeb.with(this)
             .setAgentWebParent(web_container, 1, layoutParams)
             .useDefaultIndicator()
             .setWebView(mWebView)
             .setWebChromeClient(webChromeClient)
-            .setMainFrameErrorView(R.layout.web_error_page, -1)
+            .setMainFrameErrorView(errorView)
             .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
             .createAgentWeb()
             .ready()
@@ -74,6 +79,7 @@ class WebActivity : BaseActivity() {
 
         agentWeb?.webCreator?.webView?.run {
             settings.domStorageEnabled = true
+            webViewClient = mWebViewClient
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             }
@@ -117,6 +123,9 @@ class WebActivity : BaseActivity() {
             super.onReceivedTitle(view, title)
             tv_title.text = title
         }
+    }
+
+    private val mWebViewClient = object : com.just.agentweb.WebViewClient() {
     }
 
 }
