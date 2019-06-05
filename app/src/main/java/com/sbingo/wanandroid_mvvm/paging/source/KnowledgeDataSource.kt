@@ -11,7 +11,7 @@ import com.sbingo.wanandroid_mvvm.utils.asyncSubscribe
  */
 class KnowledgeDataSource(private val httpManager: HttpManager, private val knowledgeId: Int) : BaseItemKeyedDataSource<Article>() {
 
-    var pageNo = 1
+    var pageNo = 0
 
     override fun setKey(item: Article) = item.id
 
