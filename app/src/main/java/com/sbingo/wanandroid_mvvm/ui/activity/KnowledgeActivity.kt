@@ -5,6 +5,7 @@ import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.KnowledgeViewPagerAdapter
 import com.sbingo.wanandroid_mvvm.base.BaseActivity
+import com.sbingo.wanandroid_mvvm.base.BaseFragment
 import com.sbingo.wanandroid_mvvm.model.Chapter
 import kotlinx.android.synthetic.main.fragment_tab_vp.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -39,6 +40,14 @@ class KnowledgeActivity : BaseActivity() {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.let {
                         viewPager.setCurrentItem(it.position, false)
+                        val f = adapter.getItem(it.position) as BaseFragment
+                        postDelayed({
+                            if (f.shouldShowEmpty) {
+                                f.showEmpty()
+                            } else {
+                                f.hideEmpty()
+                            }
+                        }, 2000)
                     }
                 }
             })
