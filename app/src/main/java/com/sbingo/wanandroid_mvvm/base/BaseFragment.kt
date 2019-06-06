@@ -84,12 +84,14 @@ abstract class BaseFragment : Fragment() {
         })
 
     fun showEmpty() {
-        shouldShowEmpty = true
-        (activity as BaseActivity).showEmptyView()
+        if (isVisible) {
+            shouldShowEmpty = true
+            (activity as BaseActivity).showEmptyView()
+        }
     }
 
     fun hideEmpty() {
-        if (shouldShowEmpty) {
+        if (shouldShowEmpty && isResumed) {
             shouldShowEmpty = false
             (activity as BaseActivity).hideEmptyView()
         }

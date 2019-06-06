@@ -48,7 +48,14 @@ class HomeFragment : BaseFragment() {
             })
             refreshState.observe(
                 viewLifecycleOwner,
-                Observer { swipeRefreshLayout.isRefreshing = it.isLoading() })
+                Observer {
+                    swipeRefreshLayout.isRefreshing = it.isLoading()
+                    if (it.isLoading()) {
+                        hideEmpty()
+                    } else if (it.isSuccess() && it.data!!) {
+                        showEmpty()
+                    }
+                })
             networkState.observe(viewLifecycleOwner, Observer {
                 adapter.setRequestState(it)
             })
@@ -66,5 +73,4 @@ class HomeFragment : BaseFragment() {
     private fun initRecyclerView() {
         recyclerView.adapter = adapter
     }
-
 }
