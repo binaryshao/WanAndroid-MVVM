@@ -13,6 +13,7 @@ import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.orhanobut.logger.Logger
 import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.utils.Listeners
@@ -43,6 +44,26 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initData()
         subscribeUi()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        Logger.d("${this::class.java.simpleName} 隐藏ing? $hidden")
+        if (hidden) {
+            (activity as BaseActivity).hideEmptyView()
+        } else if (shouldShowEmpty) {
+            (activity as BaseActivity).showEmptyView()
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Logger.d("${this::class.java.simpleName} isVisibleToUser? $isVisibleToUser")
+        if (!isVisibleToUser) {
+            (activity as? BaseActivity)?.hideEmptyView()
+        } else if (shouldShowEmpty) {
+            (activity as? BaseActivity)?.showEmptyView()
+        }
     }
 
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
