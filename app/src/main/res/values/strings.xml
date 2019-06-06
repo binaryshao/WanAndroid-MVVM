@@ -18,6 +18,7 @@
     <string name="loading">加载中…</string>
     <string name="title_err">未知标题</string>
     <string name="web_page_err">网页 %s 加载失败 o(╥﹏╥)o</string>
+    <string name="no_data">暂无数据 o(╥﹏╥)o</string>
 
     <string name="exit_hint">再按一次退出</string>
     <string name="network_error">网络连接不可用,请检查网络!</string>

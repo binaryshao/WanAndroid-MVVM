@@ -33,6 +33,7 @@ abstract class BaseFragment : Fragment() {
     private lateinit var permissionListener: Listeners.PermissionListener
     private lateinit var deniedPermissions: HashMap<String, Array<String>>
     private var showPermissionDialogOnDenied: Boolean = true
+    var shouldShowEmpty = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutId, container, false)
@@ -47,14 +48,31 @@ abstract class BaseFragment : Fragment() {
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
         liveData.observe(this, Observer { result ->
             if (result.isLoading()) {
+                hideEmpty()
                 showLoading()
-            } else if (result?.data != null && result.isSuccess()) {
-                finishLoading()
-                action(result.data)
             } else {
                 finishLoading()
+                if (result.isSuccess()) {
+                    if (result?.data != null) {
+                        action(result.data)
+                    } else {
+                        showEmpty()
+                    }
+                }
             }
         })
+
+    fun showEmpty() {
+        shouldShowEmpty = true
+        (activity as BaseActivity).showEmptyView()
+    }
+
+    fun hideEmpty() {
+        if (shouldShowEmpty) {
+            shouldShowEmpty = false
+            (activity as BaseActivity).hideEmptyView()
+        }
+    }
 
     fun showLoading() {
     }
