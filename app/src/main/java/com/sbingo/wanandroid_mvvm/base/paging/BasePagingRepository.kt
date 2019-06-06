@@ -21,7 +21,7 @@ abstract class BasePagingRepository<T> {
             )
         )
         val refreshState = Transformations.switchMap(sourceFactory.sourceLivaData) { it.refreshStatus }
-        val networkStatus = Transformations.switchMap(sourceFactory.sourceLivaData) { it.networkStatus }
+        val networkStatus = Transformations.switchMap(sourceFactory.sourceLivaData) { it.loadMoreStatus }
 
         return Listing(
             pagedList,

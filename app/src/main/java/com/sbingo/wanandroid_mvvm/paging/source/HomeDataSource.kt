@@ -24,10 +24,10 @@ class HomeDataSource(private val httpManager: HttpManager) : BaseItemKeyedDataSo
         httpManager.wanApi.getArticles(pageNo)
             .asyncSubscribe({
                 pageNo = it.data?.curPage!!
-                networkSuccess()
+                loadMoreSuccess()
                 callback.onResult(it.data?.datas!!)
             }, {
-                networkFailed(it.message, params, callback)
+                loadMoreFailed(it.message, params, callback)
             })
     }
 
@@ -51,7 +51,7 @@ class HomeDataSource(private val httpManager: HttpManager) : BaseItemKeyedDataSo
             })
             .asyncSubscribe({
                 pageNo = it.data?.curPage!!
-                refreshSuccess()
+                refreshSuccess(it.data?.datas!!.isEmpty())
                 callback.onResult(it.data?.datas!!)
             }, {
                 refreshFailed(it.message, params, callback)

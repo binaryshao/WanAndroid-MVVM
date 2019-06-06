@@ -15,13 +15,13 @@ class KnowledgeTreeDataSource(private val httpManager: HttpManager) : BaseItemKe
     override fun setKey(item: Chapter) = item.id
 
     override fun onLoadAfter(params: LoadParams<Int>, callback: LoadCallback<Chapter>) {
-        networkSuccess()
+        loadMoreSuccess()
     }
 
     override fun onLoadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Chapter>) {
         httpManager.wanApi.getKnowledgeTree()
             .asyncSubscribe({
-                refreshSuccess()
+                refreshSuccess(it.data!!.isEmpty())
                 callback.onResult(it.data!!)
             }, {
                 refreshFailed(it.message, params, callback)

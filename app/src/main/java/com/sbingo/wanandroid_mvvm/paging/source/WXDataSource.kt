@@ -19,10 +19,10 @@ class WXDataSource(private val httpManager: HttpManager, private val wxId: Int) 
         httpManager.wanApi.getWXArticles(wxId, pageNo)
             .asyncSubscribe({
                 pageNo += 1
-                networkSuccess()
+                loadMoreSuccess()
                 callback.onResult(it.data?.datas!!)
             }, {
-                networkFailed(it.message, params, callback)
+                loadMoreFailed(it.message, params, callback)
             })
     }
 
@@ -30,7 +30,7 @@ class WXDataSource(private val httpManager: HttpManager, private val wxId: Int) 
         httpManager.wanApi.getWXArticles(wxId, pageNo)
             .asyncSubscribe({
                 pageNo += 1
-                refreshSuccess()
+                refreshSuccess(it.data?.datas!!.isEmpty())
                 callback.onResult(it.data?.datas!!)
             }, {
                 refreshFailed(it.message, params, callback)

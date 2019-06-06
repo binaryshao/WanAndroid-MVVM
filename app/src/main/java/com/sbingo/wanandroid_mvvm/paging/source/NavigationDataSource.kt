@@ -15,13 +15,13 @@ class NavigationDataSource(private val httpManager: HttpManager) : BaseItemKeyed
     override fun setKey(item: Navigation) = item.cid
 
     override fun onLoadAfter(params: LoadParams<Int>, callback: LoadCallback<Navigation>) {
-        networkSuccess()
+        loadMoreSuccess()
     }
 
     override fun onLoadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Navigation>) {
         httpManager.wanApi.getProjectArticles()
             .asyncSubscribe({
-                refreshSuccess()
+                refreshSuccess(it.data!!.isEmpty())
                 callback.onResult(it.data!!)
             }, {
                 refreshFailed(it.message, params, callback)
