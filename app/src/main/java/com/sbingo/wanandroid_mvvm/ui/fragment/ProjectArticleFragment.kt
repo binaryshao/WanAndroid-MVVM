@@ -51,9 +51,7 @@ class ProjectArticleFragment(private val projectId: Int) : BaseFragment() {
                 Observer {
                     swipeRefreshLayout.isRefreshing = it.isLoading()
                     if (it.isLoading()) {
-                        hideEmpty()
                     } else if (it.isSuccess() && it.data!!) {
-                        showEmpty()
                     }
                 })
             networkState.observe(viewLifecycleOwner, Observer {

@@ -51,9 +51,7 @@ class KnowledgeFragment(private val knowledgeId: Int) : BaseFragment() {
                 Observer {
                     swipeRefreshLayout.isRefreshing = it.isLoading()
                     if (it.isLoading()) {
-                        hideEmpty()
-                    } else if (it.isSuccess()) {
-                        shouldShowEmpty = it.data!!
+                    } else if (it.isSuccess() && it.data!!) {
                     }
                 })
             networkState.observe(viewLifecycleOwner, Observer {

@@ -13,7 +13,6 @@ import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.orhanobut.logger.Logger
 import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.utils.Listeners
@@ -34,7 +33,6 @@ abstract class BaseFragment : Fragment() {
     private lateinit var permissionListener: Listeners.PermissionListener
     private lateinit var deniedPermissions: HashMap<String, Array<String>>
     private var showPermissionDialogOnDenied: Boolean = true
-    var shouldShowEmpty = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutId, container, false)
@@ -46,30 +44,9 @@ abstract class BaseFragment : Fragment() {
         subscribeUi()
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        Logger.d("${this::class.java.simpleName} 隐藏ing? $hidden")
-        if (hidden) {
-            (activity as BaseActivity).hideEmptyView()
-        } else if (shouldShowEmpty) {
-            (activity as BaseActivity).showEmptyView()
-        }
-    }
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        Logger.d("${this::class.java.simpleName} isVisibleToUser? $isVisibleToUser")
-        if (!isVisibleToUser) {
-            (activity as? BaseActivity)?.hideEmptyView()
-        } else if (shouldShowEmpty) {
-            (activity as? BaseActivity)?.showEmptyView()
-        }
-    }
-
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
         liveData.observe(this, Observer { result ->
             if (result.isLoading()) {
-                hideEmpty()
                 showLoading()
             } else {
                 finishLoading()
@@ -77,25 +54,10 @@ abstract class BaseFragment : Fragment() {
                     if (result?.data != null) {
                         action(result.data)
                     } else {
-                        showEmpty()
                     }
                 }
             }
         })
-
-    fun showEmpty() {
-        if (isVisible) {
-            shouldShowEmpty = true
-            (activity as BaseActivity).showEmptyView()
-        }
-    }
-
-    fun hideEmpty() {
-        if (shouldShowEmpty && isResumed) {
-            shouldShowEmpty = false
-            (activity as BaseActivity).hideEmptyView()
-        }
-    }
 
     fun showLoading() {
     }

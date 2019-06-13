@@ -1,14 +1,9 @@
 package com.sbingo.wanandroid_mvvm.base
 
 import android.app.AlertDialog
-import android.content.Context
-import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -37,24 +32,6 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var deniedPermissions: HashMap<String, Array<String>>
     private var showPermissionDialogOnDenied: Boolean = true
 
-    private val emptyView by lazy {
-        layoutInflater.inflate(R.layout.empty_view, null)
-    }
-
-    private val mWindowManager by lazy {
-        getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    }
-
-    private val mLayoutParams by lazy {
-        WindowManager.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-            PixelFormat.TRANSLUCENT
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (this !is BaseBindingActivity<*> && this !is ScanActivity) {
@@ -74,7 +51,6 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
         liveData.observe(this, Observer { result ->
             if (result.isLoading()) {
-                hideEmptyView()
                 showLoading()
             } else {
                 finishLoading()
@@ -82,7 +58,6 @@ abstract class BaseActivity : AppCompatActivity() {
                     if (result?.data != null) {
                         action(result.data)
                     } else {
-                        showEmptyView()
                     }
                 }
             }
@@ -92,27 +67,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun finishLoading() {
-    }
-
-    fun showEmptyView() {
-        if (emptyView.parent == null) {
-            mLayoutParams.run {
-                gravity = Gravity.CENTER
-                windowAnimations = R.style.anim_empty_view
-            }
-            mWindowManager.addView(emptyView, mLayoutParams)
-        }
-    }
-
-    fun hideEmptyView() {
-        if (emptyView != null && emptyView.parent != null) {
-            mWindowManager.removeView(emptyView)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        hideEmptyView()
     }
 
     protected fun checkPermissions(permissions: Array<String>, permissionsCN: Array<String>, reasons: Array<String>, listener: Listeners.PermissionListener) {
