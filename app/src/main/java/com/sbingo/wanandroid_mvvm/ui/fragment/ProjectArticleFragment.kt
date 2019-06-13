@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.classic.common.MultipleStatusView
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.HomeAdapter
 import com.sbingo.wanandroid_mvvm.base.BaseFragment
@@ -36,6 +37,8 @@ class ProjectArticleFragment(private val projectId: Int) : BaseFragment() {
 
     override var layoutId = R.layout.refresh_layout
 
+    override var multipleStatusView: MultipleStatusView? = null
+
     override fun initData() {
         initSwipe()
         initRecyclerView()
@@ -49,9 +52,14 @@ class ProjectArticleFragment(private val projectId: Int) : BaseFragment() {
             refreshState.observe(
                 viewLifecycleOwner,
                 Observer {
-                    swipeRefreshLayout.isRefreshing = it.isLoading()
                     if (it.isLoading()) {
-                    } else if (it.isSuccess() && it.data!!) {
+                        multipleStatusView?.showLoading()
+                    } else if (it.isSuccess()) {
+                        if (it.data!!) {
+                            multipleStatusView?.showEmpty()
+                        } else {
+                            multipleStatusView?.showContent()
+                        }
                     }
                 })
             networkState.observe(viewLifecycleOwner, Observer {
@@ -59,6 +67,10 @@ class ProjectArticleFragment(private val projectId: Int) : BaseFragment() {
             })
             setPageSize()
         }
+    }
+
+    override fun onRetry() {
+        viewModel.refresh()
     }
 
     private fun initSwipe() {

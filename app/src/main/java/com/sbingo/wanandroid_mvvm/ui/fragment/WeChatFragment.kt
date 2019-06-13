@@ -3,6 +3,7 @@ package com.sbingo.wanandroid_mvvm.ui.fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.classic.common.MultipleStatusView
 import com.google.android.material.tabs.TabLayout
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.WeChatViewPagerAdapter
@@ -34,6 +35,8 @@ class WeChatFragment : BaseFragment() {
     }
 
     override var layoutId = R.layout.fragment_tab_vp
+
+    override var multipleStatusView: MultipleStatusView? = null
 
     override fun initData() {
         viewPager.adapter = adapter

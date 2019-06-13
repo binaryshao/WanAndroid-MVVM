@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
+import com.classic.common.MultipleStatusView
 import com.orhanobut.logger.Logger
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.NavigationChapterAdapter
@@ -58,6 +59,8 @@ class NavigationFragment : BaseFragment() {
 
     override var layoutId = R.layout.fragment_navigation
 
+    override var multipleStatusView: MultipleStatusView? = null
+
     override fun initData() {
         initSwipe()
         initRecyclerView()
@@ -72,9 +75,14 @@ class NavigationFragment : BaseFragment() {
             refreshState.observe(
                 viewLifecycleOwner,
                 Observer {
-                    swipeRefreshLayout.isRefreshing = it.isLoading()
                     if (it.isLoading()) {
-                    } else if (it.isSuccess() && it.data!!) {
+                        multipleStatusView?.showLoading()
+                    } else if (it.isSuccess()) {
+                        if (it.data!!) {
+                            multipleStatusView?.showEmpty()
+                        } else {
+                            multipleStatusView?.showContent()
+                        }
                     }
                 })
             networkState.observe(viewLifecycleOwner, Observer {
@@ -83,6 +91,10 @@ class NavigationFragment : BaseFragment() {
             })
             setPageSize()
         }
+    }
+
+    override fun onRetry() {
+        viewModel.refresh()
     }
 
     private fun initSwipe() {

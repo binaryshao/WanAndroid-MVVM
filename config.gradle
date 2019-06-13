@@ -43,6 +43,7 @@ ext {
             "flowlayout"             : "com.hyman:flowlayout-lib:1.1.2",
             "banner"                 : 'cn.bingoogolapple:bga-banner:2.2.6@aar',
             "zbar"                   : "me.dm7.barcodescanner:zbar:1.9",
+            "multiple-status-view"   : "com.classic.common:multiple-status-view:1.6",
     ]
 
     libraries = depend.values()

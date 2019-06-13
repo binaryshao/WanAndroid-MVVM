@@ -13,6 +13,7 @@ import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.classic.common.MultipleStatusView
 import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.utils.Listeners
@@ -25,6 +26,8 @@ import java.util.*
 abstract class BaseFragment : Fragment() {
 
     protected abstract var layoutId: Int
+
+    protected abstract var multipleStatusView: MultipleStatusView?
 
     protected abstract fun initData()
 
@@ -41,29 +44,29 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+        multipleStatusView?.setOnRetryClickListener { onRetry() }
         subscribeUi()
+    }
+
+    open fun onRetry() {
+
     }
 
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
         liveData.observe(this, Observer { result ->
             if (result.isLoading()) {
-                showLoading()
+                multipleStatusView?.showLoading()
             } else {
-                finishLoading()
                 if (result.isSuccess()) {
                     if (result?.data != null) {
+                        multipleStatusView?.showContent()
                         action(result.data)
                     } else {
+                        multipleStatusView?.showEmpty()
                     }
                 }
             }
         })
-
-    fun showLoading() {
-    }
-
-    fun finishLoading() {
-    }
 
     protected fun checkPermissions(permissions: Array<String>, permissionsCN: Array<String>, reasons: Array<String>, listener: Listeners.PermissionListener) {
         permissionListener = listener
