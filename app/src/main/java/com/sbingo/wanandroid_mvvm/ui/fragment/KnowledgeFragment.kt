@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.classic.common.MultipleStatusView
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.HomeAdapter
 import com.sbingo.wanandroid_mvvm.base.BaseFragment
@@ -37,9 +36,8 @@ class KnowledgeFragment(private val knowledgeId: Int) : BaseFragment() {
 
     override var layoutId = R.layout.refresh_layout
 
-    override var multipleStatusView: MultipleStatusView? = null
-
     override fun initData() {
+        multipleStatusView = multiple_status_view
         initSwipe()
         initRecyclerView()
     }
@@ -52,20 +50,29 @@ class KnowledgeFragment(private val knowledgeId: Int) : BaseFragment() {
             refreshState.observe(
                 viewLifecycleOwner,
                 Observer {
-                    if (it.isLoading()) {
-                        multipleStatusView?.showLoading()
-                    } else if (it.isSuccess()) {
-                        if (it.data!!) {
-                            multipleStatusView?.showEmpty()
-                        } else {
-                            multipleStatusView?.showContent()
-                        }
+                    swipeRefreshLayout.isRefreshing = false
+                    when {
+                        it.isLoading() ->
+                            if (isRefreshFromPull) {
+                                swipeRefreshLayout.isRefreshing = true
+                                isRefreshFromPull = false
+                            } else {
+                                multipleStatusView?.showLoading()
+                            }
+                        it.isSuccess() ->
+                            if (it.data!!) {
+                                // refreshState 中的 data 表示数据是否为空
+                                multipleStatusView?.showEmpty()
+                            } else {
+                                multipleStatusView?.showContent()
+                            }
+                        it.isError() -> multipleStatusView?.showError()
                     }
                 })
             networkState.observe(viewLifecycleOwner, Observer {
                 adapter.setRequestState(it)
             })
-            setPageSize()
+            initLoad()
         }
     }
 
@@ -75,7 +82,10 @@ class KnowledgeFragment(private val knowledgeId: Int) : BaseFragment() {
 
     private fun initSwipe() {
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE)
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        swipeRefreshLayout.setOnRefreshListener {
+            isRefreshFromPull = true
+            viewModel.refresh()
+        }
     }
 
     private fun initRecyclerView() {

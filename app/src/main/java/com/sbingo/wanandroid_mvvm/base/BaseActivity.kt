@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.classic.common.MultipleStatusView
 import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.ui.activity.ScanActivity
@@ -23,6 +24,8 @@ import java.util.*
 abstract class BaseActivity : AppCompatActivity() {
 
     protected abstract var layoutId: Int
+
+    protected var multipleStatusView: MultipleStatusView? = null
 
     protected abstract fun initData()
 
@@ -38,7 +41,16 @@ abstract class BaseActivity : AppCompatActivity() {
             setContentView(layoutId)
         }
         initData()
+        multipleStatusView?.setOnClickListener {
+            when (multipleStatusView?.viewStatus) {
+                MultipleStatusView.STATUS_ERROR, MultipleStatusView.STATUS_EMPTY -> onRetry()
+            }
+        }
         subscribeUi()
+    }
+
+    open fun onRetry() {
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -51,23 +63,18 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun <T> handleData(liveData: LiveData<RequestState<T>>, action: (T) -> Unit) =
         liveData.observe(this, Observer { result ->
             if (result.isLoading()) {
-                showLoading()
-            } else {
-                finishLoading()
-                if (result.isSuccess()) {
-                    if (result?.data != null) {
-                        action(result.data)
-                    } else {
-                    }
+                multipleStatusView?.showLoading()
+            } else if (result.isSuccess()) {
+                if (result?.data != null) {
+                    multipleStatusView?.showContent()
+                    action(result.data)
+                } else {
+                    multipleStatusView?.showEmpty()
                 }
+            } else if (result.isError()) {
+                multipleStatusView?.showError()
             }
         })
-
-    fun showLoading() {
-    }
-
-    fun finishLoading() {
-    }
 
     protected fun checkPermissions(permissions: Array<String>, permissionsCN: Array<String>, reasons: Array<String>, listener: Listeners.PermissionListener) {
         permissionListener = listener

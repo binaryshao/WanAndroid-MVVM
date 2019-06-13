@@ -23,7 +23,7 @@ open class BasePagingViewModel<T>(repository: BasePagingRepository<T>) : ViewMod
         repoResult.value?.refresh?.invoke()
     }
 
-    fun setPageSize(newSize: Int = 10): Boolean {
+    fun initLoad(newSize: Int = 10): Boolean {
         if (pageSize.value == newSize)
             return false
         pageSize.value = newSize

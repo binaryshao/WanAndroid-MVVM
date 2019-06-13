@@ -3,8 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/empty_view"
+        android:id="@+id/error_view"
         android:gravity="center"
-        android:text="@string/no_data"
+        android:text="@string/error_loading"
         android:textSize="@dimen/sp_20"
         android:textColor="@color/textColorSecondary"/>

@@ -3,7 +3,6 @@ package com.sbingo.wanandroid_mvvm.ui.fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.classic.common.MultipleStatusView
 import com.google.android.material.tabs.TabLayout
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.ProjectViewPagerAdapter
@@ -36,9 +35,8 @@ class ProjectFragment : BaseFragment() {
 
     override var layoutId = R.layout.fragment_tab_vp
 
-    override var multipleStatusView: MultipleStatusView? = null
-
     override fun initData() {
+        multipleStatusView = multiple_status_view
         viewPager.adapter = adapter
         tabLayout.run {
             setupWithViewPager(viewPager)

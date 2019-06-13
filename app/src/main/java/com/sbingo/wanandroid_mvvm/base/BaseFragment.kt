@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.classic.common.MultipleStatusView
+import com.classic.common.MultipleStatusView.STATUS_EMPTY
+import com.classic.common.MultipleStatusView.STATUS_ERROR
 import com.sbingo.wanandroid_mvvm.Constants
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.utils.Listeners
@@ -27,7 +29,7 @@ abstract class BaseFragment : Fragment() {
 
     protected abstract var layoutId: Int
 
-    protected abstract var multipleStatusView: MultipleStatusView?
+    protected var multipleStatusView: MultipleStatusView? = null
 
     protected abstract fun initData()
 
@@ -36,6 +38,7 @@ abstract class BaseFragment : Fragment() {
     private lateinit var permissionListener: Listeners.PermissionListener
     private lateinit var deniedPermissions: HashMap<String, Array<String>>
     private var showPermissionDialogOnDenied: Boolean = true
+    protected var isRefreshFromPull = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutId, container, false)
@@ -44,7 +47,11 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
-        multipleStatusView?.setOnRetryClickListener { onRetry() }
+        multipleStatusView?.setOnClickListener {
+            when (multipleStatusView?.viewStatus) {
+                STATUS_ERROR, STATUS_EMPTY -> onRetry()
+            }
+        }
         subscribeUi()
     }
 
@@ -56,15 +63,15 @@ abstract class BaseFragment : Fragment() {
         liveData.observe(this, Observer { result ->
             if (result.isLoading()) {
                 multipleStatusView?.showLoading()
-            } else {
-                if (result.isSuccess()) {
-                    if (result?.data != null) {
-                        multipleStatusView?.showContent()
-                        action(result.data)
-                    } else {
-                        multipleStatusView?.showEmpty()
-                    }
+            } else if (result.isSuccess()) {
+                if (result?.data != null) {
+                    multipleStatusView?.showContent()
+                    action(result.data)
+                } else {
+                    multipleStatusView?.showEmpty()
                 }
+            } else if (result.isError()) {
+                multipleStatusView?.showError()
             }
         })
 

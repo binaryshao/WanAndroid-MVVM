@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
-import com.classic.common.MultipleStatusView
 import com.orhanobut.logger.Logger
 import com.sbingo.wanandroid_mvvm.R
 import com.sbingo.wanandroid_mvvm.adapter.NavigationChapterAdapter
@@ -18,7 +17,6 @@ import com.sbingo.wanandroid_mvvm.data.http.HttpManager
 import com.sbingo.wanandroid_mvvm.paging.repository.NavigationRepository
 import com.sbingo.wanandroid_mvvm.viewmodel.NavigationViewModel
 import kotlinx.android.synthetic.main.fragment_navigation.*
-import kotlinx.android.synthetic.main.refresh_layout.swipeRefreshLayout
 
 /**
  * Author: Sbingo666
@@ -59,9 +57,8 @@ class NavigationFragment : BaseFragment() {
 
     override var layoutId = R.layout.fragment_navigation
 
-    override var multipleStatusView: MultipleStatusView? = null
-
     override fun initData() {
+        multipleStatusView = multiple_status_view
         initSwipe()
         initRecyclerView()
     }
@@ -75,21 +72,30 @@ class NavigationFragment : BaseFragment() {
             refreshState.observe(
                 viewLifecycleOwner,
                 Observer {
-                    if (it.isLoading()) {
-                        multipleStatusView?.showLoading()
-                    } else if (it.isSuccess()) {
-                        if (it.data!!) {
-                            multipleStatusView?.showEmpty()
-                        } else {
-                            multipleStatusView?.showContent()
-                        }
+                    swipeRefreshLayout.isRefreshing = false
+                    when {
+                        it.isLoading() ->
+                            if (isRefreshFromPull) {
+                                swipeRefreshLayout.isRefreshing = true
+                                isRefreshFromPull = false
+                            } else {
+                                multipleStatusView?.showLoading()
+                            }
+                        it.isSuccess() ->
+                            if (it.data!!) {
+                                // refreshState 中的 data 表示数据是否为空
+                                multipleStatusView?.showEmpty()
+                            } else {
+                                multipleStatusView?.showContent()
+                            }
+                        it.isError() -> multipleStatusView?.showError()
                     }
                 })
             networkState.observe(viewLifecycleOwner, Observer {
                 adapterChapter.setRequestState(it)
                 adapterWebsite.setRequestState(it)
             })
-            setPageSize()
+            initLoad()
         }
     }
 
@@ -100,6 +106,7 @@ class NavigationFragment : BaseFragment() {
     private fun initSwipe() {
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE)
         swipeRefreshLayout.setOnRefreshListener {
+            isRefreshFromPull = true
             viewModel.refresh()
             adapterChapter.setCheckedPosition(0)
         }
