@@ -30,11 +30,11 @@
 数据来源 : [玩 Android](https://www.wanandroid.com/blog/show/2)
 
 ### 关于作者
-个人网站 &nbsp;: [Sbingo666](http://sbingo666.com/)
+个人网站 &nbsp;: [binaryshao](http://sbingo666.com/)
 
-Github &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [Sbingo](https://github.com/Sbingo)
+Github &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [binaryshao](https://github.com/binaryshao)
 
-CSDN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [Sbingo666](https://blog.csdn.net/recordgrowth)
+CSDN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [binaryshao](https://blog.csdn.net/recordgrowth)
 
 Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: shaojianbin@sbingo666.com
 
